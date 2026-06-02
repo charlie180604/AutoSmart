@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresion | AutoSmart Advisor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <style>
+        :root {
+            --dark: #0f172a;
+            --dark-2: #020617;
+            --blue: #2563eb;
+            --cyan: #38bdf8;
+            --green: #16a34a;
+            --amber: #f59e0b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(14px);
+            padding: 17px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-brand {
+            color: var(--white) !important;
+            font-weight: 900;
+            font-size: 1.45rem;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand span { color: var(--cyan); }
+
+        .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 600;
+            margin-left: 18px;
+            font-size: 0.98rem;
+        }
+
+        .nav-link:hover { color: var(--white) !important; }
+
+        .page-header {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.22), transparent 34%),
+                linear-gradient(135deg, #020617 0%, #0f172a 52%, #1e3a8a 100%);
+            color: var(--white);
+            padding: 130px 0 70px;
+        }
+
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #bae6fd;
+            padding: 9px 16px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            margin-bottom: 16px;
+        }
+
+        .page-header p {
+            color: #cbd5e1;
+            font-size: 1.08rem;
+            max-width: 780px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .regresion-section { padding: 70px 0 90px; }
+
+        .section-title {
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            margin-bottom: 12px;
+        }
+
+        .section-text {
+            color: var(--gray);
+            max-width: 780px;
+            margin-bottom: 34px;
+            line-height: 1.7;
+        }
+
+        .metric-card,
+        .chart-card,
+        .insight-card,
+        .info-box {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            height: 100%;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+        }
+
+        .metric-card,
+        .insight-card { padding: 24px; }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            background: #dbeafe;
+            color: var(--blue);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            margin-bottom: 16px;
+        }
+
+        .metric-card h3 {
+            font-weight: 900;
+            font-size: clamp(1.1rem, 2vw, 1.55rem);
+            line-height: 1.18;
+            margin-bottom: 4px;
+            letter-spacing: -0.4px;
+            overflow-wrap: anywhere;
+        }
+
+        .metric-card p,
+        .insight-card p {
+            color: var(--gray);
+            margin: 0;
+            font-size: 0.94rem;
+            line-height: 1.65;
+        }
+
+        .variable-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .variable-pill {
+            background: #e0f2fe;
+            color: #075985;
+            border-radius: 999px;
+            padding: 8px 13px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .chart-card {
+            padding: 28px;
+            overflow: hidden;
+        }
+
+        .chart-card h4,
+        .insight-card h4 {
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .chart-card .description {
+            color: var(--gray);
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            min-width: 0;
+            height: 370px;
+        }
+
+        .chart-container.tall {
+            height: 440px;
+        }
+
+        .chart-container .js-plotly-plot,
+        .chart-container .plot-container,
+        .chart-container .svg-container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .quality-value {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 96px;
+            padding: 8px 14px;
+            border-radius: 14px;
+            background: #e0f2fe;
+            color: #075985;
+            font-weight: 900;
+            font-size: clamp(1rem, 2vw, 1.35rem);
+            margin-bottom: 16px;
+        }
+
+        .info-box {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 36%),
+                linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: var(--white);
+            padding: 30px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
+        }
+
+        .info-box ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #cbd5e1;
+            line-height: 1.75;
+        }
+
+        .interpretacion-resultados {
+            position: relative;
+            z-index: 2;
+        }
+
+        .interpretacion-resultados .insight-card {
+            height: auto;
+            min-height: 120px;
+        }
+
+        .interpretacion-resultados .metric-icon i {
+            color: #2563eb;
+            font-size: 1.35rem;
+            line-height: 1;
+        }
+
+        footer {
+            background: var(--dark-2);
+            color: #94a3b8;
+            padding: 24px 0;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 992px) {
+            .page-header h1 { font-size: 2.35rem; }
+            .nav-link {
+                margin-left: 0;
+                padding-top: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header { padding-top: 115px; }
+            .chart-card,
+            .metric-card,
+            .insight-card { padding: 22px; }
+            .chart-container { height: 315px; }
+            .chart-container.tall { height: 360px; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                AutoSmart <span>Advisor</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a href="/" class="nav-link">Inicio</a></li>
+                    <li class="nav-item"><a href="/formulario" class="nav-link">Recomendacion</a></li>
+                    <li class="nav-item"><a href="/analisis" class="nav-link">Analisis</a></li>
+                    <li class="nav-item"><a href="/extras" class="nav-link">Extras</a></li>
+                    <li class="nav-item"><a href="/acerca" class="nav-link">Acerca</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <div class="page-badge">
+                <i class="bi bi-graph-up-arrow"></i>
+                Aprendizaje supervisado
+            </div>
+
+            <h1>Regresion de precio</h1>
+
+            <p>
+                Esta seccion estima el precio de un vehiculo a partir de su ano, kilometraje, combustible,
+                tipo de vendedor y numero de propietarios, con base en el catalogo analizado por AutoSmart Advisor.
+            </p>
+        </div>
+    </header>
+
+    <section class="regresion-section">
+        <div class="container">
+            <div class="mb-4">
+                <h2 class="section-title">Resumen del modelo</h2>
+                <p class="section-text">
+                    Resumen de la configuracion y los datos empleados para estimar el precio durante la evaluacion.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-6 col-lg-3">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="bi bi-cpu"></i></div>
+                        <h3>Modelo de regresion</h3>
+                        <p>Ensemble de arboles de decision para estimar precio</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="bi bi-car-front"></i></div>
+                        <h3>{{ "{:,}".format(registros_utilizados) }}</h3>
+                        <p>Registros utilizados</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="bi bi-currency-dollar"></i></div>
+                        <h3>Precio</h3>
+                        <p>Valor que el modelo intenta estimar</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="bi bi-collection"></i></div>
+                        <h3>{{ variables_utilizadas|length }}</h3>
+                        <p>Variables de entrada</p>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="metric-card">
+                        <p>Variables utilizadas</p>
+                        <div class="variable-list">
+                            {% for variable in variables_utilizadas %}
+                            <span class="variable-pill">{{ variable }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Metricas de regresion</h2>
+                <p class="section-text">
+                    Indicadores que resumen la calidad del modelo al estimar el precio en el conjunto de prueba.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="insight-card">
+                        <div class="quality-value">{{ "{:,.2f}".format(mae) }}</div>
+                        <h4>Error absoluto medio (MAE)</h4>
+                        <p>
+                            Diferencia promedio en pesos entre el precio real y el estimado en la evaluacion.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="insight-card">
+                        <div class="quality-value">{{ "{:,.2f}".format(rmse) }}</div>
+                        <h4>Raiz del error cuadratico (RMSE)</h4>
+                        <p>
+                            Indicador que da mas peso a los errores de estimacion mas grandes.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="insight-card">
+                        <div class="quality-value">{{ "%.4f"|format(r2) }}</div>
+                        <h4>Coeficiente R²</h4>
+                        <p>
+                            Proporcion de la variacion del precio que el modelo logra explicar en prueba.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Interpretacion de metricas</h2>
+                <p class="section-text">
+                    Lectura automatica de los indicadores de calidad obtenidos durante la evaluacion.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-5 interpretacion-resultados">
+                {% for texto in interpretacion_metricas %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="insight-card">
+                        <div class="metric-icon"><i class="bi bi-chat-left-text"></i></div>
+                        <p>{{ texto }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Precio real vs precio predicho</h2>
+                <p class="section-text">
+                    Comparacion visual entre el precio observado y el estimado en los resultados de evaluacion.
+                </p>
+            </div>
+
+            <div class="chart-card mb-4">
+                <h4>Comparacion de precios</h4>
+                <p class="description">
+                    Cada punto representa un vehiculo evaluado. La linea punteada indica una estimacion perfecta.
+                </p>
+                <div id="graficaRealesVsPredichos" class="chart-container tall"></div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Interpretacion de predicciones</h2>
+                <p class="section-text">
+                    Lectura automatica del comportamiento del modelo en distintos rangos de precio.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-5 interpretacion-resultados">
+                {% for texto in interpretacion_predicciones %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="insight-card">
+                        <div class="metric-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                        <p>{{ texto }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Importancia de variables</h2>
+                <p class="section-text">
+                    Variables con mayor influencia en la estimacion del precio del vehiculo.
+                </p>
+            </div>
+
+            <div class="chart-card mb-5">
+                <h4>Variables con mayor influencia</h4>
+                <p class="description">
+                    Ordenadas de mayor a menor relevancia segun el analisis del modelo entrenado.
+                </p>
+                <div id="graficaImportancia" class="chart-container tall"></div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Distribucion de errores</h2>
+                <p class="section-text">
+                    Frecuencia de las diferencias entre precio real y precio estimado en la evaluacion.
+                </p>
+            </div>
+
+            <div class="chart-card mb-4">
+                <h4>Histograma de diferencias</h4>
+                <p class="description">
+                    Muestra si las estimaciones tienden a quedar por encima o por debajo del precio real.
+                </p>
+                <div id="graficaErrores" class="chart-container"></div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Interpretacion de errores</h2>
+                <p class="section-text">
+                    Lectura automatica de la distribucion de errores y posibles sesgos del modelo.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-5 interpretacion-resultados">
+                {% for texto in interpretacion_errores %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="insight-card">
+                        <div class="metric-icon"><i class="bi bi-exclamation-triangle"></i></div>
+                        <p>{{ texto }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Conclusiones generales</h2>
+                <p class="section-text">
+                    Sintesis automatica de los resultados obtenidos durante la evaluacion del modelo.
+                </p>
+            </div>
+
+            <div class="info-box">
+                <ul>
+                    {% for conclusion in conclusiones %}
+                    <li>{{ conclusion }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            AutoSmart Advisor &copy; 2026 | Sistema web inteligente de recomendacion de automoviles
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const chartData = {{ chart_data | tojson }};
+
+        const plotConfig = {
+            responsive: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: ['lasso2d', 'select2d']
+        };
+
+        const commonLayout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            margin: { t: 24, r: 18, b: 54, l: 64 },
+            font: { family: 'Inter, sans-serif', color: '#0f172a' },
+            xaxis: { gridcolor: '#e2e8f0', zerolinecolor: '#e2e8f0' },
+            yaxis: { gridcolor: '#e2e8f0', zerolinecolor: '#e2e8f0' }
+        };
+
+        function etiquetaAmigable(nombre) {
+            if (!nombre) return '';
+            const mapa = {
+                anio: 'Ano',
+                kilometraje: 'Kilometraje',
+                combustible: 'Combustible',
+                tipo_vendedor: 'Tipo de vendedor',
+                propietarios: 'Propietarios'
+            };
+            if (mapa[nombre]) return mapa[nombre];
+            const partes = String(nombre).split('_');
+            const base = partes[0];
+            const resto = partes.slice(1).join(' ');
+            const baseEtiqueta = mapa[base] || (base.charAt(0).toUpperCase() + base.slice(1));
+            return resto ? `${baseEtiqueta} (${resto})` : baseEtiqueta;
+        }
+
+        function margenIzquierdoParaEtiquetas(etiquetas, minimo = 120, extraPorCaracter = 7) {
+            const maximo = Math.max(...etiquetas.map((e) => String(e).length), 8);
+            return Math.min(320, Math.max(minimo, 24 + maximo * extraPorCaracter));
+        }
+
+        // Precio real vs precio predicho
+        (function() {
+            const datos = chartData.reales_vs_predichos || [];
+            const preciosReales = datos.map((item) => item.precio_real);
+            const preciosPredichos = datos.map((item) => item.precio_predicho);
+            const minimo = Math.min(...preciosReales, ...preciosPredichos);
+            const maximo = Math.max(...preciosReales, ...preciosPredichos);
+
+            Plotly.newPlot('graficaRealesVsPredichos', [
+                {
+                    type: 'scatter',
+                    mode: 'markers',
+                    x: preciosReales,
+                    y: preciosPredichos,
+                    name: 'Vehiculos',
+                    marker: { color: 'rgba(37, 99, 235, 0.55)', size: 7 },
+                    hovertemplate: 'Precio real: %{x:,.0f}<br>Precio predicho: %{y:,.0f}<extra></extra>'
+                },
+                {
+                    type: 'scatter',
+                    mode: 'lines',
+                    x: [minimo, maximo],
+                    y: [minimo, maximo],
+                    name: 'Prediccion perfecta',
+                    line: { color: 'rgba(245, 158, 11, 0.95)', width: 2, dash: 'dash' },
+                    hoverinfo: 'skip'
+                }
+            ], {
+                ...commonLayout,
+                xaxis: { ...commonLayout.xaxis, title: 'Precio real', tickformat: ',.0f' },
+                yaxis: { ...commonLayout.yaxis, title: 'Precio predicho', tickformat: ',.0f' },
+                legend: { orientation: 'h', y: 1.1 },
+                margin: { t: 24, r: 24, b: 64, l: 80 }
+            }, plotConfig);
+        })();
+
+        // Importancia de variables
+        (function() {
+            const imp = chartData.importancia_variables || { top: [] };
+            const top = imp.top || [];
+            const variablesRaw = top.map((item) => item.variable);
+            const variables = variablesRaw.map(etiquetaAmigable).reverse();
+            const valores = top.map((item) => item.importancia).reverse();
+            const margenIzq = margenIzquierdoParaEtiquetas(variables);
+
+            Plotly.newPlot('graficaImportancia', [{
+                type: 'bar',
+                orientation: 'h',
+                y: variables,
+                x: valores,
+                marker: { color: 'rgba(22, 163, 74, 0.85)' },
+                hovertemplate: '%{y}<br>Relevancia: %{x:.4f}<extra></extra>'
+            }], {
+                ...commonLayout,
+                margin: { t: 24, r: 24, b: 54, l: margenIzq },
+                xaxis: { ...commonLayout.xaxis, title: 'Nivel de influencia', rangemode: 'tozero' },
+                yaxis: {
+                    ...commonLayout.yaxis,
+                    automargin: true,
+                    tickfont: { size: 11 }
+                }
+            }, plotConfig);
+        })();
+
+        // Distribucion de errores
+        (function() {
+            const listaErrores = (chartData.errores || []).map((item) => item.error);
+
+            Plotly.newPlot('graficaErrores', [{
+                type: 'histogram',
+                x: listaErrores,
+                marker: { color: 'rgba(37, 99, 235, 0.85)' },
+                hovertemplate: 'Error: %{x:,.0f}<br>Frecuencia: %{y}<extra></extra>'
+            }], {
+                ...commonLayout,
+                xaxis: { ...commonLayout.xaxis, title: 'Error (precio real - precio predicho)', tickformat: ',.0f' },
+                yaxis: { ...commonLayout.yaxis, title: 'Frecuencia', rangemode: 'tozero' }
+            }, plotConfig);
+        })();
+
+        window.addEventListener('resize', () => {
+            ['graficaRealesVsPredichos', 'graficaImportancia', 'graficaErrores'].forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) Plotly.Plots.resize(el);
+            });
+        });
+    </script>
+</body>
+</html>
