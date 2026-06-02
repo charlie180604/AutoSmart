@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis | AutoSmart Advisor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <style>
+        :root {
+            --dark: #0f172a;
+            --dark-2: #020617;
+            --blue: #2563eb;
+            --cyan: #38bdf8;
+            --green: #16a34a;
+            --amber: #f59e0b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(14px);
+            padding: 17px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-brand {
+            color: var(--white) !important;
+            font-weight: 900;
+            font-size: 1.45rem;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand span {
+            color: var(--cyan);
+        }
+
+        .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 600;
+            margin-left: 18px;
+            font-size: 0.98rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--white) !important;
+        }
+
+        .page-header {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.22), transparent 34%),
+                linear-gradient(135deg, #020617 0%, #0f172a 52%, #1e3a8a 100%);
+            color: var(--white);
+            padding: 130px 0 70px;
+        }
+
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #bae6fd;
+            padding: 9px 16px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            margin-bottom: 16px;
+        }
+
+        .page-header p {
+            color: #cbd5e1;
+            font-size: 1.08rem;
+            max-width: 760px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .analysis-section {
+            padding: 70px 0 90px;
+        }
+
+        .section-title {
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            margin-bottom: 12px;
+        }
+
+        .section-text {
+            color: var(--gray);
+            max-width: 760px;
+            margin-bottom: 34px;
+            line-height: 1.7;
+        }
+
+        .metric-card,
+        .chart-card,
+        .insight-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            height: 100%;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+        }
+
+        .metric-card {
+            padding: 24px;
+        }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            background: #dbeafe;
+            color: var(--blue);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            margin-bottom: 16px;
+        }
+
+        .metric-card h3 {
+            font-weight: 900;
+            font-size: clamp(1.28rem, 2vw, 1.58rem);
+            line-height: 1.18;
+            margin-bottom: 4px;
+            letter-spacing: -0.4px;
+            overflow-wrap: anywhere;
+        }
+
+        .metric-card p {
+            color: var(--gray);
+            margin: 0;
+            font-size: 0.92rem;
+        }
+
+        .chart-card {
+            padding: 28px;
+            overflow: hidden;
+        }
+
+        .chart-card h4,
+        .insight-card h4 {
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .chart-card .description,
+        .insight-card p {
+            color: var(--gray);
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 360px;
+            min-width: 0;
+        }
+
+        .chart-container .js-plotly-plot,
+        .chart-container .plot-container,
+        .chart-container .svg-container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .outlier-card {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.14), transparent 34%),
+                linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 28px;
+            height: 100%;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+        }
+
+        .outlier-card .label {
+            color: var(--gray);
+            font-weight: 700;
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 8px;
+        }
+
+        .outlier-card .count {
+            font-size: 2.35rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 18px;
+        }
+
+        .range-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .range-line span {
+            color: var(--gray);
+            font-size: 0.88rem;
+        }
+
+        .range-line strong {
+            display: block;
+            font-size: 0.96rem;
+            margin-top: 4px;
+        }
+
+        .info-box {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 36%),
+                linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: var(--white);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
+        }
+
+        .info-box p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .correlation-card {
+            padding: 24px;
+        }
+
+        .correlation-value {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            height: 42px;
+            border-radius: 14px;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .correlation-value.positiva {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .correlation-value.negativa {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .correlation-value.neutral {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        footer {
+            background: var(--dark-2);
+            color: #94a3b8;
+            padding: 24px 0;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 992px) {
+            .page-header h1 {
+                font-size: 2.35rem;
+            }
+
+            .nav-link {
+                margin-left: 0;
+                padding-top: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header {
+                padding-top: 115px;
+            }
+
+            .chart-card,
+            .metric-card,
+            .outlier-card {
+                padding: 22px;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+
+            #heatmapCorrelacion {
+                height: 320px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                AutoSmart <span>Advisor</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a href="/" class="nav-link">Inicio</a></li>
+                    <li class="nav-item"><a href="/formulario" class="nav-link">Recomendacion</a></li>
+                    <li class="nav-item"><a href="/analisis" class="nav-link active">Analisis</a></li>
+                    <li class="nav-item"><a href="/extras" class="nav-link">Extras</a></li>
+                    <li class="nav-item"><a href="/acerca" class="nav-link">Acerca</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <div class="page-badge">
+                <i class="bi bi-bar-chart-line"></i>
+                Analisis exploratorio real
+            </div>
+
+            <h1>Analisis del mercado de autos</h1>
+
+            <p>
+                Esta vista resume el comportamiento del dataset actual de AutoSmart Advisor:
+                precios, kilometraje, anos, valores atipicos y relaciones principales entre variables.
+            </p>
+        </div>
+    </header>
+
+    <section class="analysis-section">
+        <div class="container">
+            <div class="mb-4">
+                <h2 class="section-title">Resumen general del dataset</h2>
+                <p class="section-text">
+                    Indicadores principales calculados desde los vehiculos disponibles en el dataset procesado.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                {% for metrica in metricas %}
+                <div class="col-sm-6 col-lg-3">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="bi {{ metrica.icono }}"></i>
+                        </div>
+                        <h3>{{ metrica.valor }}</h3>
+                        <p>{{ metrica.titulo }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Deteccion de outliers</h2>
+                <p class="section-text">
+                    Los valores atipicos representan vehiculos con caracteristicas muy alejadas del comportamiento general del mercado.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-lg-6">
+                    <div class="outlier-card">
+                        <div class="label">Outliers en precio</div>
+                        <div class="count">{{ outliers.precio.cantidad_outliers }}</div>
+                        <div class="range-line">
+                            <div>
+                                <span>Minimo atipico</span>
+                                <strong>{{ outliers.precio.minimo_formateado }}</strong>
+                            </div>
+                            <div>
+                                <span>Maximo atipico</span>
+                                <strong>{{ outliers.precio.maximo_formateado }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="outlier-card">
+                        <div class="label">Outliers en kilometraje</div>
+                        <div class="count">{{ outliers.kilometraje.cantidad_outliers }}</div>
+                        <div class="range-line">
+                            <div>
+                                <span>Minimo atipico</span>
+                                <strong>{{ outliers.kilometraje.minimo_formateado }} km</strong>
+                            </div>
+                            <div>
+                                <span>Maximo atipico</span>
+                                <strong>{{ outliers.kilometraje.maximo_formateado }} km</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Correlaciones principales</h2>
+                <p class="section-text">
+                    Lectura rapida de las relaciones mas utiles para entender como se mueve el precio frente al ano y al uso del vehiculo.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                {% for correlacion in correlaciones %}
+                <div class="col-lg-4">
+                    <div class="insight-card correlation-card">
+                        <div class="correlation-value {{ correlacion.clase }}">
+                            {{ correlacion.valor }}
+                        </div>
+                        <h4>{{ correlacion.nombre }}</h4>
+                        <p>{{ correlacion.texto }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="info-box mb-5">
+                <p>
+                    Los vehiculos mas nuevos tienden a tener un precio mas alto, mientras que los autos con mas kilometraje suelen ubicarse en rangos de precio menores. Estas relaciones ayudan a explicar el comportamiento general del dataset antes de construir modelos predictivos.
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="section-title">Visualizaciones del dataset</h2>
+                <p class="section-text">
+                    Graficas interactivas generadas con datos reales para explorar distribuciones, dispersion y relaciones entre variables.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <h4>Histograma de precios</h4>
+                        <p class="description">Distribucion general de precios registrados.</p>
+                        <div id="histogramaPrecios" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <h4>Boxplot de precios</h4>
+                        <p class="description">Rango central y valores extremos del precio.</p>
+                        <div id="boxplotPrecios" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <h4>Precio vs Anio</h4>
+                        <p class="description">Relacion entre antiguedad del vehiculo y precio.</p>
+                        <div id="dispersionAnio" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <h4>Precio vs Kilometraje</h4>
+                        <p class="description">Relacion entre uso acumulado y precio.</p>
+                        <div id="dispersionKilometraje" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="chart-card">
+                        <h4>Heatmap de correlacion</h4>
+                        <p class="description">Vista compacta de relaciones entre variables numericas.</p>
+                        <div id="heatmapCorrelacion" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            AutoSmart Advisor &copy; 2026 | Sistema web inteligente de recomendacion de automoviles
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const chartData = {{ chart_data | tojson }};
+        const plotConfig = {
+            responsive: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: ['lasso2d', 'select2d']
+        };
+
+        const commonLayout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            margin: { t: 24, r: 18, b: 54, l: 64 },
+            font: { family: 'Inter, sans-serif', color: '#0f172a' },
+            xaxis: { gridcolor: '#e2e8f0', zerolinecolor: '#e2e8f0' },
+            yaxis: { gridcolor: '#e2e8f0', zerolinecolor: '#e2e8f0' }
+        };
+
+        Plotly.newPlot('histogramaPrecios', [{
+            type: 'histogram',
+            x: chartData.precios,
+            nbinsx: 32,
+            marker: { color: '#38bdf8', line: { color: '#2563eb', width: 1 } },
+            hovertemplate: 'Precio: %{x:$,.0f}<br>Vehiculos: %{y}<extra></extra>'
+        }], {
+            ...commonLayout,
+            xaxis: { ...commonLayout.xaxis, title: 'Precio' },
+            yaxis: { ...commonLayout.yaxis, title: 'Vehiculos' }
+        }, plotConfig);
+
+        Plotly.newPlot('boxplotPrecios', [{
+            type: 'box',
+            y: chartData.precios,
+            name: 'Precio',
+            boxpoints: 'outliers',
+            marker: { color: '#2563eb', outliercolor: '#f59e0b' },
+            line: { color: '#0f172a' },
+            hovertemplate: 'Precio: %{y:$,.0f}<extra></extra>'
+        }], {
+            ...commonLayout,
+            xaxis: { visible: false },
+            yaxis: { ...commonLayout.yaxis, title: 'Precio' }
+        }, plotConfig);
+
+        Plotly.newPlot('dispersionAnio', [{
+            type: 'scatter',
+            mode: 'markers',
+            x: chartData.anios_precio,
+            y: chartData.precios_por_anio,
+            marker: { color: '#2563eb', size: 7, opacity: 0.58 },
+            hovertemplate: 'Anio: %{x}<br>Precio: %{y:$,.0f}<extra></extra>'
+        }], {
+            ...commonLayout,
+            xaxis: { ...commonLayout.xaxis, title: 'Anio' },
+            yaxis: { ...commonLayout.yaxis, title: 'Precio' }
+        }, plotConfig);
+
+        Plotly.newPlot('dispersionKilometraje', [{
+            type: 'scatter',
+            mode: 'markers',
+            x: chartData.kilometrajes,
+            y: chartData.precios_por_kilometraje,
+            marker: { color: '#16a34a', size: 7, opacity: 0.52 },
+            hovertemplate: 'Kilometraje: %{x:,.0f} km<br>Precio: %{y:$,.0f}<extra></extra>'
+        }], {
+            ...commonLayout,
+            xaxis: { ...commonLayout.xaxis, title: 'Kilometraje' },
+            yaxis: { ...commonLayout.yaxis, title: 'Precio' }
+        }, plotConfig);
+
+        Plotly.newPlot('heatmapCorrelacion', [{
+            type: 'heatmap',
+            x: chartData.correlacion_columnas,
+            y: chartData.correlacion_columnas,
+            z: chartData.correlacion_matriz,
+            zmin: -1,
+            zmax: 1,
+            colorscale: [
+                [0, '#ef4444'],
+                [0.5, '#f8fafc'],
+                [1, '#2563eb']
+            ],
+            hovertemplate: '%{y} - %{x}<br>Correlacion: %{z:.2f}<extra></extra>'
+        }], {
+            ...commonLayout,
+            margin: { t: 24, r: 18, b: 64, l: 92 }
+        }, plotConfig);
+
+        window.addEventListener('resize', () => {
+            [
+                'histogramaPrecios',
+                'boxplotPrecios',
+                'dispersionAnio',
+                'dispersionKilometraje',
+                'heatmapCorrelacion'
+            ].forEach((chartId) => {
+                Plotly.Plots.resize(document.getElementById(chartId));
+            });
+        });
+    </script>
+</body>
+</html>
