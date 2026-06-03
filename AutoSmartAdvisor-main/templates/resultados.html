@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados | AutoSmart Advisor</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --dark: #0f172a;
+            --dark-2: #020617;
+            --blue: #2563eb;
+            --cyan: #38bdf8;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(14px);
+            padding: 17px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-brand {
+            color: var(--white) !important;
+            font-weight: 900;
+            font-size: 1.45rem;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand span {
+            color: var(--cyan);
+        }
+
+        .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 600;
+            margin-left: 18px;
+            font-size: 0.98rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--white) !important;
+        }
+
+        /* HEADER */
+        .page-header {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.22), transparent 34%),
+                linear-gradient(135deg, #020617 0%, #0f172a 52%, #1e3a8a 100%);
+            color: var(--white);
+            padding: 130px 0 70px;
+        }
+
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #bae6fd;
+            padding: 9px 16px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            margin-bottom: 16px;
+        }
+
+        .page-header p {
+            color: #cbd5e1;
+            font-size: 1.08rem;
+            max-width: 760px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* CONTENT */
+        .results-section {
+            padding: 70px 0 90px;
+        }
+
+        .summary-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+            height: 100%;
+        }
+
+        .summary-card h3 {
+            font-weight: 900;
+            letter-spacing: -0.6px;
+            margin-bottom: 18px;
+        }
+
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #dbeafe;
+            color: var(--blue);
+            padding: 9px 15px;
+            border-radius: 999px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .summary-card p {
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .risk-card {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 36%),
+                linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: var(--white);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
+            height: 100%;
+        }
+
+        .risk-card h3 {
+            font-weight: 900;
+            letter-spacing: -0.6px;
+            margin-bottom: 18px;
+        }
+
+        .risk-level {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 999px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .risk-bajo {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            color: #86efac;
+        }
+
+        .risk-medio {
+            background: rgba(245, 158, 11, 0.16);
+            border: 1px solid rgba(245, 158, 11, 0.38);
+            color: #fcd34d;
+        }
+
+        .risk-alto {
+            background: rgba(239, 68, 68, 0.16);
+            border: 1px solid rgba(239, 68, 68, 0.38);
+            color: #fca5a5;
+        }
+
+        .risk-neutral {
+            background: rgba(148, 163, 184, 0.16);
+            border: 1px solid rgba(148, 163, 184, 0.38);
+            color: #e2e8f0;
+        }
+
+        .risk-card p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            margin: 55px 0 12px;
+        }
+
+        .section-text {
+            color: var(--gray);
+            max-width: 760px;
+            line-height: 1.7;
+            margin-bottom: 34px;
+        }
+
+        .car-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            padding: 28px;
+            height: 100%;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+            transition: 0.25s ease;
+        }
+
+        .car-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 55px rgba(15, 23, 42, 0.11);
+        }
+
+        .car-icon {
+            width: 58px;
+            height: 58px;
+            background: #dbeafe;
+            color: var(--blue);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.55rem;
+            margin-bottom: 20px;
+        }
+
+        .car-card h4 {
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .car-card .car-type {
+            color: var(--gray);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .car-data {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .car-data span {
+            color: var(--gray);
+        }
+
+        .car-data strong {
+            color: var(--dark);
+        }
+
+        .compatibility {
+            margin-top: 22px;
+        }
+
+        .compatibility-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .progress {
+            height: 12px;
+            border-radius: 999px;
+            background: #e2e8f0;
+        }
+
+        .progress-bar {
+            background: var(--cyan);
+            border-radius: 999px;
+        }
+
+        .recommendation-tag {
+            display: inline-block;
+            margin-top: 18px;
+            background: #dcfce7;
+            color: #15803d;
+            font-weight: 800;
+            padding: 8px 13px;
+            border-radius: 999px;
+            font-size: 0.86rem;
+        }
+
+        .empty-results {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            padding: 30px;
+            color: var(--gray);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+        }
+
+        .empty-results h4 {
+            color: var(--dark);
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .actions-box {
+            margin-top: 55px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+        }
+
+        .actions-box h3 {
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .actions-box p {
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .btn-main {
+            background: var(--cyan);
+            color: var(--dark);
+            border: none;
+            font-weight: 850;
+            padding: 13px 24px;
+            border-radius: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.25s ease;
+        }
+
+        .btn-main:hover {
+            background: #7dd3fc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary-custom {
+            background: #e2e8f0;
+            color: var(--dark);
+            font-weight: 800;
+            padding: 13px 24px;
+            border-radius: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 10px;
+        }
+
+        .btn-secondary-custom:hover {
+            background: #cbd5e1;
+            color: var(--dark);
+        }
+
+        footer {
+            background: var(--dark-2);
+            color: #94a3b8;
+            padding: 24px 0;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 992px) {
+            .page-header h1 {
+                font-size: 2.35rem;
+            }
+
+            .nav-link {
+                margin-left: 0;
+                padding-top: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header {
+                padding-top: 115px;
+            }
+
+            .summary-card,
+            .risk-card,
+            .car-card,
+            .actions-box {
+                padding: 25px;
+            }
+
+            .btn-secondary-custom {
+                margin-left: 0;
+                margin-top: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                AutoSmart <span>Advisor</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/formulario" class="nav-link active">Recomendación</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ENCABEZADO -->
+    <header class="page-header">
+        <div class="container">
+            <div class="page-badge">
+                <i class="bi bi-check-circle"></i>
+                Recomendación generada
+            </div>
+
+            <h1>Resultados de la recomendación</h1>
+
+            <p>
+                Estas son las opciones que mejor se ajustan a los datos que ingresaste.
+            </p>
+        </div>
+    </header>
+
+    <!-- RESULTADOS -->
+    <section class="results-section">
+        <div class="container">
+
+            <!-- AUTOS RECOMENDADOS -->
+            <h2 class="section-title">Autos recomendados</h2>
+            <p class="section-text">
+                Estas opciones representan los vehículos con mayor compatibilidad según tu presupuesto
+                y preferencias.
+            </p>
+
+            <div class="row g-4">
+
+                {% if autos_recomendados %}
+                {% for auto in autos_recomendados %}
+                <div class="col-lg-4">
+                    <div class="car-card">
+                        <div class="car-icon">
+                            <i class="bi bi-car-front"></i>
+                        </div>
+
+                        <h4>{{ auto.nombre }}</h4>
+                        <div class="car-type">{{ auto.tipo }} | {{ auto.combustible }} | {{ auto.transmision }}</div>
+
+                        <div class="car-data">
+                            <span>Precio estimado</span>
+                            <strong>{{ auto.precio }}</strong>
+                        </div>
+
+                        <div class="car-data">
+                            <span>Año</span>
+                            <strong>{{ auto.anio }}</strong>
+                        </div>
+
+                        <div class="car-data">
+                            <span>Rendimiento</span>
+                            <strong>{{ auto.rendimiento }}</strong>
+                        </div>
+
+                        <div class="car-data">
+                            <span>Pasajeros</span>
+                            <strong>{{ auto.pasajeros }}</strong>
+                        </div>
+
+                        <div class="compatibility">
+                            <div class="compatibility-label">
+                                <span>Compatibilidad</span>
+                                <span>{{ auto.compatibilidad }}%</span>
+                            </div>
+
+                            <div class="progress">
+                                <div class="progress-bar" style="width: {{ auto.compatibilidad }}%;"></div>
+                            </div>
+                        </div>
+
+                        <span class="recommendation-tag">{{ auto.etiqueta }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="col-12">
+                    <div class="empty-results">
+                        <h4>No se encontraron autos recomendados</h4>
+                        <p>
+                            No fue posible generar recomendaciones con los datos actuales.
+                            Intenta ajustar el presupuesto o seleccionar combustible y transmisión como indiferente.
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- ACCIONES -->
+            <div class="actions-box">
+                <h3>¿Quieres probar con otros datos?</h3>
+
+                <p>
+                    Puedes regresar al formulario y generar una nueva recomendación.
+                </p>
+
+                <a href="/formulario" class="btn-main">
+                    Nueva predicción
+                    <i class="bi bi-arrow-repeat"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            AutoSmart Advisor &copy; 2026 | Sistema web inteligente de recomendación de automóviles
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

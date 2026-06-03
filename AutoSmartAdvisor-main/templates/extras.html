@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extras | AutoSmart Advisor</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --dark: #0f172a;
+            --dark-2: #020617;
+            --blue: #2563eb;
+            --cyan: #38bdf8;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(14px);
+            padding: 17px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-brand {
+            color: var(--white) !important;
+            font-weight: 900;
+            font-size: 1.45rem;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand span {
+            color: var(--cyan);
+        }
+
+        .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 600;
+            margin-left: 18px;
+            font-size: 0.98rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--white) !important;
+        }
+
+        /* HEADER */
+        .page-header {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.22), transparent 34%),
+                linear-gradient(135deg, #020617 0%, #0f172a 52%, #1e3a8a 100%);
+            color: var(--white);
+            padding: 130px 0 70px;
+        }
+
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #bae6fd;
+            padding: 9px 16px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            margin-bottom: 16px;
+        }
+
+        .page-header p {
+            color: #cbd5e1;
+            font-size: 1.08rem;
+            max-width: 760px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* CONTENT */
+        .extras-section {
+            padding: 70px 0 90px;
+        }
+
+        .section-title {
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            margin-bottom: 12px;
+        }
+
+        .section-text {
+            color: var(--gray);
+            max-width: 760px;
+            line-height: 1.7;
+            margin-bottom: 42px;
+        }
+
+        .extra-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            padding: 30px;
+            height: 100%;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+            transition: 0.25s ease;
+        }
+
+        .extra-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 55px rgba(15, 23, 42, 0.11);
+        }
+
+        .extra-icon {
+            width: 58px;
+            height: 58px;
+            background: #dbeafe;
+            color: var(--blue);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.55rem;
+            margin-bottom: 22px;
+        }
+
+        .extra-card h4 {
+            font-weight: 850;
+            letter-spacing: -0.4px;
+            margin-bottom: 12px;
+        }
+
+        .extra-card p {
+            color: var(--gray);
+            line-height: 1.65;
+            margin-bottom: 24px;
+            font-size: 0.96rem;
+        }
+
+        .btn-extra {
+            background: var(--cyan);
+            color: var(--dark);
+            border: none;
+            font-weight: 800;
+            padding: 12px 22px;
+            border-radius: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            transition: 0.25s ease;
+        }
+
+        .btn-extra:hover {
+            background: #7dd3fc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-extra {
+            border: 1px solid var(--border);
+            color: var(--dark);
+            background: #f8fafc;
+            font-weight: 800;
+            padding: 12px 22px;
+            border-radius: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            transition: 0.25s ease;
+        }
+
+        .btn-outline-extra:hover {
+            background: #e2e8f0;
+            color: var(--dark);
+        }
+
+        .reserved-box {
+            margin-top: 55px;
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 36%),
+                linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: var(--white);
+            border-radius: 28px;
+            padding: 36px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
+        }
+
+        .reserved-box h3 {
+            font-weight: 900;
+            letter-spacing: -0.6px;
+            margin-bottom: 14px;
+        }
+
+        .reserved-box p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.13);
+            color: #bae6fd;
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            padding: 7px 13px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin: 6px 6px 0 0;
+        }
+
+        footer {
+            background: var(--dark-2);
+            color: #94a3b8;
+            padding: 24px 0;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 992px) {
+            .page-header h1 {
+                font-size: 2.35rem;
+            }
+
+            .nav-link {
+                margin-left: 0;
+                padding-top: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header {
+                padding-top: 115px;
+            }
+
+            .extra-card {
+                padding: 26px;
+            }
+
+            .reserved-box {
+                padding: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                AutoSmart <span>Advisor</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/formulario" class="nav-link">Recomendación</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/analisis" class="nav-link">Análisis</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/extras" class="nav-link active">Extras</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/acerca" class="nav-link">Acerca</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ENCABEZADO -->
+    <header class="page-header">
+        <div class="container">
+            <div class="page-badge">
+                <i class="bi bi-grid-1x2"></i>
+                Recursos complementarios
+            </div>
+
+            <h1>Extras del sistema</h1>
+
+            <p>
+                En este apartado se agrupan herramientas complementarias del proyecto,
+                como gráficas, comparaciones, métricas, pruebas del modelo y otros elementos
+                adicionales solicitados durante la evaluación.
+            </p>
+        </div>
+    </header>
+
+    <!-- CONTENIDO -->
+    <section class="extras-section">
+        <div class="container">
+
+            <h2 class="section-title">Apartados disponibles</h2>
+            <p class="section-text">
+                Estos módulos complementan la recomendación principal y permiten mostrar información
+                adicional sobre el funcionamiento del sistema.
+            </p>
+
+            <div class="row g-4">
+
+                <!-- GRÁFICAS -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="bi bi-collection-play"></i>
+                        </div>
+
+                        <h4>Centro de Visualización ML</h4>
+
+                        <p>
+                            Accede a PCA, K-Means, DBSCAN, Clasificación, Regresión y futuras
+                            implementaciones de redes neuronales desde un único punto central.
+                        </p>
+
+                        <a href="/centro-visualizacion" class="btn-extra">
+                            Explorar algoritmos
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- COMPARACIÓN -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="bi bi-columns-gap"></i>
+                        </div>
+
+                        <h4>Comparación de vehículos</h4>
+
+                        <p>
+                            Apartado pensado para comparar el automóvil elegido por el usuario
+                            contra las opciones recomendadas por el sistema.
+                        </p>
+
+                        <a href="/comparacion" class="btn-outline-extra">
+                            Ver comparación
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- MÉTRICAS -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+
+                        <h4>Métricas del modelo</h4>
+
+                        <p>
+                            Espacio para mostrar indicadores del sistema, resultados de prueba,
+                            precisión aproximada o datos relevantes del procesamiento.
+                        </p>
+
+                        <a href="/metricas" class="btn-outline-extra">
+                            Ver métricas
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ALGORITMOS -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+
+                        <h4>Algoritmos utilizados</h4>
+
+                        <p>
+                            Explicación breve de DBSCAN, red neuronal e Isolation Forest,
+                            y cómo participa cada uno dentro del sistema.
+                        </p>
+
+                        <a href="/acerca" class="btn-outline-extra">
+                            Ver explicación
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- DATASET -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="bi bi-database"></i>
+                        </div>
+
+                        <h4>Información del dataset</h4>
+
+                        <p>
+                            Apartado para describir los datos utilizados, columnas principales,
+                            variables del usuario y variables del vehículo.
+                        </p>
+
+                        <a href="/dataset" class="btn-outline-extra">
+                            Ver dataset
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PRUEBAS -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="extra-card">
+                        <div class="extra-icon">
+                            <i class="bi bi-clipboard-check"></i>
+                        </div>
+
+                        <h4>Pruebas del sistema</h4>
+
+                        <p>
+                            Espacio reservado para ejemplos de entrada, salidas obtenidas
+                            y casos de prueba del sistema web.
+                        </p>
+
+                        <a href="/pruebas" class="btn-outline-extra">
+                            Ver pruebas
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RESERVADO -->
+            <div class="reserved-box">
+                <h3>Espacio reservado para requisitos adicionales</h3>
+
+                <p>
+                    Si el profesor solicita algún elemento extra, como una gráfica específica,
+                    una tabla de resultados, una comparación adicional o una explicación técnica,
+                    puede agregarse en este apartado sin modificar la estructura principal del sistema.
+                </p>
+
+                <div class="mt-3">
+                    <span class="tag">Gráficas</span>
+                    <span class="tag">Tablas</span>
+                    <span class="tag">Pruebas</span>
+                    <span class="tag">Métricas</span>
+                    <span class="tag">Comparaciones</span>
+                    <span class="tag">Evidencias</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            AutoSmart Advisor &copy; 2026 | Sistema web inteligente de recomendación de automóviles
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
