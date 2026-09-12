@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PWA: manifest e identidad visual para instalar la app. -->
+  <meta name="theme-color" content="#320a18">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Carta Secreta">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <title>I Love You</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background-glow" aria-hidden="true"></div>
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <!-- PANTALLA INICIAL: esto es lo primero que se ve antes de desbloquear la pagina. -->
+  <section class="gate-screen" id="lockGate" aria-labelledby="lockTitle">
+    <div class="access-card" id="accessCard">
+      <p class="card-label">Leelo cuando estés solo</p>
+      <h1 id="lockTitle">Te amo</h1>
+      <p class="card-subtitle">Introduce tu dia y mi mes de nacimiento</p>
+
+      <div class="passcode-dots" id="passcodeDots" aria-label="Codigo ingresado">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <p class="status-message" id="statusMessage" aria-live="polite"></p>
+
+      <div class="keypad" aria-label="Teclado numerico">
+        <button type="button" class="key" data-number="1">1</button>
+        <button type="button" class="key" data-number="2">2</button>
+        <button type="button" class="key" data-number="3">3</button>
+        <button type="button" class="key" data-number="4">4</button>
+        <button type="button" class="key" data-number="5">5</button>
+        <button type="button" class="key" data-number="6">6</button>
+        <button type="button" class="key" data-number="7">7</button>
+        <button type="button" class="key" data-number="8">8</button>
+        <button type="button" class="key" data-number="9">9</button>
+        <button type="button" class="key key-small" data-action="delete">borrar</button>
+        <button type="button" class="key" data-number="0">0</button>
+        <button type="button" class="key key-small key-accept" data-action="accept">aceptar</button>
+      </div>
+    </div>
+  </section>
+
+  <header class="site-header" id="siteHeader" hidden>
+    <a class="brand" href="#carta-secreta" data-section-link="carta-secreta">Bienvenido Amado Mio</a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="main-nav" id="mainNav" aria-label="Secciones principales">
+      <button type="button" class="nav-link is-active" data-section-link="carta-secreta">Carta Secreta</button>
+      <button type="button" class="nav-link" data-section-link="happy-birthday">Happy Birthday</button>
+      <button type="button" class="nav-link" data-section-link="la-razon-de-amarte">La Razón de Amarte</button>
+      <button type="button" class="nav-link" data-section-link="recuerdos">Recuerdos</button>
+    </nav>
+
+    <!-- MUSICA EN EL NAVBAR: cambia las canciones desde CANCIONES en script.js. -->
+    <div class="nav-player" aria-label="Musica">
+      <button type="button" class="nav-music-button" id="prevSong" aria-label="Cancion anterior">‹</button>
+      <select id="songSelect" class="nav-song-select" aria-label="Elegir cancion"></select>
+      <button type="button" class="nav-music-button play" id="playPauseSong">Play</button>
+      <button type="button" class="nav-music-button" id="nextSong" aria-label="Siguiente cancion">›</button>
+    </div>
+  </header>
+
+  <main class="app-shell" id="mainContent" hidden>
+    <!-- SECCION CARTA SECRETA: esta es la primera seccion que aparece despues del codigo. -->
+    <section class="page-section is-active" id="carta-secreta" data-section="carta-secreta">
+      <article class="letter-card">
+        <div class="photo-frame" id="photoFrame">
+          <img src="assets/foto.jpg" alt="Foto especial" class="optional-image">
+        </div>
+
+        <p class="letter-label">Te amo más que ayer y menos que mañana</p>
+        <p class="letter-note">Puedes escuchar música en la esquina mientras lees. (Solo hay 6 JAJA).</p>
+        <h2>Querido Hombre Mio</h2>
+
+        <!-- DONDE EDITAR LA CARTA: cambia estos parrafos para personalizar el mensaje. -->
+        <div class="letter-text" id="letterText">
+          <p>Hola cielo, te escribo esta carta primero antes que nada para felicitarte y agradecer por llegar a mi vida, 
+            cuando te encontré no sabía qué rumbo tomar, pero en tus ojos encontré el camino ese camino que hoy estoy segura 
+            que quiero recorrer contigo a mi lado lo que me resta de vida, quiero recalcar el gran hombre que eres, la familia 
+            que tenemos y todo lo que haces por nosotros, aunque no tienes aveces días buenos, yo estaré contigo siempre, 
+            también quiero recordarte lo mucho que te amamos, y lo felices que somos a tu lado yo solo anhelo cada día y cada 
+            latido poder estar contigo, eres el hombre más maravilloso que eh conocido, sé que la distancia terminará pronto, y 
+            estaremos en nuestra casita cielo, te ama tu futura esposa 💘</p>
+          <p>Feliz cumple años, precioso, que Dios te regale muchos años más de vida.</p>
+          <p><strong>Te amo, Cielo.</strong></p>
+        </div>
+
+        <button type="button" class="ghost-button close-letter-button" id="closeButton">Cerrar carta</button>
+      </article>
+    </section>
+
+    <!-- SECCION ACTUALIZACIONES: agrega, elimina o edita tarjetas del diario aqui. -->
+    <section class="page-section" id="happy-birthday" data-section="happy-birthday" hidden>
+      <div class="section-heading">
+        <p class="section-kicker">Espero te guste</p>
+        <h2>Happy birthday</h2>
+        <p>
+          
+          
+        </p>
+
+      </div>
+
+      <div class="birthday-media">
+        <div class="birthday-video-shell">
+          <video class="birthday-video" controls preload="auto" playsinline>
+            <source src="assets/video/Video1.mp4" type="video/mp4">
+            Tu navegador no puede reproducir este video.
+          </video>
+        </div>
+
+        <div class="birthday-message">
+          <p class="section-kicker">I love You</p>
+          <p>"Hoy el mundo celebra la vida de la persona más maravillosa y yo, 
+            aunque esté a la distancia, siento que tengo el mejor motivo del mundo para festejar. 
+            Daría cualquier cosa por poder estar ahí hoy, despertarte con un beso enorme, 
+            abrazarte fuerte y celebrar tu día como te mereces, pero mientras llega ese momento, 
+            te mando todo mi amor cruzando fronteras. Te amo en todos los universos"</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCION ¿PUDO PASAR?: edita aqui el texto sentimental y cambia la imagen opcional. -->
+    <section class="page-section" id="la-razon-de-amarte" data-section="la-razon-de-amarte" hidden>
+      <div class="mystery-layout">
+        <div class="mystery-copy">
+          <p class="section-kicker">Las 20 razones por las que te amo</p>
+          <h2>¿Por Qué Te Amo?</h2>
+          <div class="love-reasons">
+            <p>1. Tu sonrisa, esa que logra alegrarme el día sin importar qué tan difícil haya sido.</p>
+            <p>2. La paciencia infinita que me tienes.</p>
+            <p>3. Lo mucho que me haces reír con tus ocurrencias.</p>
+            <p>4. Tu nobleza y la bondad de tu corazón.</p>
+            <p>5. Lo inteligente que eres y cómo ves la vida.</p>
+            <p>6. La pasión con la que persigues tus metas y sueños.</p>
+            <p>7. Tu sentido del humor, incluso en los momentos más extraños.</p>
+            <p>8. Lo atento y detallista que llegas a ser conmigo.</p>
+            <p>9. Tu autenticidad; no intentas fingir ser alguien que no eres.</p>
+            <p>10. La humildad que mantienes a pesar de lo increíble que eres.</p>
+            <p>11. Lo segura y tranquila que me hace sentir estar a tu lado.</p>
+            <p>12. Tu valentía para enfrentar los obstáculos.</p>
+            <p>13. Lo respetuoso que eres con todos a tu alrededor.</p>
+            <p>14. Tu capacidad de escucharme cuando necesito desahogarme.</p>
+            <p>15. La ternura con la que me tratas.</p>
+            <p>16. Lo bien que te queda tu risa.</p>
+            <p>17. Tu energía positiva, que es contagiosa.</p>
+            <p>18. Lo maduro que eres cuando tenemos que resolver un problema.</p>
+            <p>19. Tu sentido de la responsabilidad.</p>
+            <p>20. Simplemente, por ser tú mismo cada día. 💘</p>
+          </div>
+        </div>
+        <figure class="mystery-image">
+          <video class="mystery-video" controls preload="auto" playsinline>
+            <source src="assets/video/Video2.mp4" type="video/mp4">
+            Tu navegador no puede reproducir este video.
+          </video>
+        </figure>
+      </div>
+    </section>
+
+    <!-- SECCION RECUERDOS: cambia imagenes y textos de la galeria aqui. Usa archivos en assets/img/. -->
+    <section class="page-section" id="recuerdos" data-section="recuerdos" hidden>
+      <div class="section-heading">
+        <p class="section-kicker">Galeria</p>
+        <h2>Recuerdos</h2>
+        <p>Aunque no tenemos recuerdos presenciales, tengo estos que llenan mi corazón 💘</p>
+      </div>
+
+      <div class="memory-grid">
+        <figure class="memory-card">
+          <img src="assets/img/recuerdo1.jpeg" alt="Recuerdo 1" class="optional-image">
+          <figcaption>Sé que ahora nuestras noches son así, pero sé que pronto estaremos abrazados uno del otro para dormir 🥹💘</figcaption>
+        </figure>
+
+        <figure class="memory-card">
+          <img src="assets/img/recuerdo2.jpg" alt="Recuerdo 2" class="optional-image">
+          <figcaption>Estoy segura que quiero compartir el resto de mi vida a tu lado.💘</figcaption>
+        </figure>
+
+        <figure class="memory-card">
+          <img src="assets/img/recuerdo3.jpg" alt="Recuerdo 3" class="optional-image">
+          <figcaption>Tú eres mi hogar.💘</figcaption>
+        </figure>
+
+        <figure class="memory-card">
+          <img src="assets/img/recuerdo4.jpg" alt="Recuerdo 4" class="optional-image">
+          <figcaption>Jamás pensé en coincidir contigo, eres maravilloso💘</figcaption>
+        </figure>
+      </div>
+    </section>
+
+  </main>
+
+  <audio id="musicAudio" preload="metadata"></audio>
+  <script src="script.js"></script>
+  <!-- PWA: registra el service worker para instalacion y cache local. -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js");
+      });
+    }
+  </script>
+</body>
+</html>
